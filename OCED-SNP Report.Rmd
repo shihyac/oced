@@ -37,8 +37,6 @@ library(ggbeeswarm)
 
 # Washtenaw County Meals on Wheels & Senior Cafe Program
 
-test
-
 The [Washtenaw County Meals on Wheels & Senior Cafe Program](https://www.washtenaw.org/snp) [(www.washtenaw.org/snp)](https://www.washtenaw.org/snp) is coordinated by the [Washtenaw County Office of Community and Economic Development](https://www.washtenaw.org/569/Community-Economic-Development) (OCED). OCED is committed to stepping out of traditional government roles to drive long-term system changes that increase equity and opportunity.
 
 Please feel free to contact [Marti Lachapell](mailto:lachapellm@washtenaw.org), the Washtenaw County Meals on Wheels & Senior Café Program Specialist, if you have any questions.
