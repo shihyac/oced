@@ -121,13 +121,7 @@ There is no 65+ seniors in Washtenaw County identified themselves as Pacific Isl
 <br><br>
 <br><br>
 <br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
+
 
 ### 1.4 Native
 Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according Native population estimate in certain age group.
