@@ -15,8 +15,7 @@ output:
   bookdown::gitbook:
     config:
       download:
-      - Washtenaw-County-Senior-Demographic-Report.pdf
-      - Washtenaw-County-Senior-Demographic-Report.epub
+      - OCED-SNP_Report.pdf
     css: styles.css
     highlight: haddock
     number_sections: no
