@@ -56,6 +56,43 @@ The [Washtenaw County Meals on Wheels & Senior Cafe Program](https://www.washten
 
 Please feel free to contact [Marti Lachapell](mailto:lachapellm@washtenaw.org), the Washtenaw County Meals on Wheels & Senior Café Program Specialist, if you have any questions.
 
+<br><br>
+
+Below is a diagram that indicates the role of OCED:
+
+```{r}
+library(DiagrammeR) # library for making diagrams
+
+grViz("
+
+digraph {
+
+graph [rankdir = LR]
+
+node [shape = oval, 
+      style = filled, 
+      fontname = Helvetica, 
+      fontsize = 10, 
+      fontcolor = white]
+
+node [color = Goldenrod, fillcolor = Goldenrod]
+
+OCED
+
+node [color = SlateGray, fillcolor = SlateGray]
+Federal State SeniorSites Seniors
+
+edge [color = grey, arrowhead = none]
+Federal -> OCED
+
+State  -> OCED
+
+OCED -> SeniorSites
+
+SeniorSites -> Seniors
+
+} ")
+```
 
 # Washtenaw County 65+ Seniors Report {.tabset}
 
@@ -74,136 +111,10 @@ load ("~/Box Sync/shihyac/RData/WashtenawDemo.RData")
 
 ```
 
-## 1. Individual Race/Ethnicity Graphs {.tabset}
 
-### 1.1 Asian
-Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according Asian population estimate in certain age group.
+## 1. Comparison Graphs {.tabset}
 
-```{r}
-Washtenaw_all %>%
-  filter(Race == "Asian" & Estimate != "0") %>%
-  ggplot(aes(x=Estimate,
-             color = Gender, fill = Gender)) + 
-  geom_histogram(alpha = .7) +
-  facet_wrap(~Age) + 
-  labs(x = "Population Estimate", 
-       y = "Frequency") +
-  scale_fill_tableau() +
-  scale_color_tableau()
-
-```
-
-
-
-### 1.2 Black
-Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according Black population estimate in certain age group.
-
-```{r}
-
-Washtenaw_all %>%
-  filter(Race == "Black" & Estimate != "0") %>%
-  ggplot(aes(x=Estimate,
-             color = Gender, fill = Gender)) + 
-  geom_histogram(alpha = .7) +
-  facet_wrap(~Age) + 
-  labs(x = "Population Estimate", 
-       y = "Frequency") +
-  scale_fill_tableau() +
-  scale_color_tableau()
-
-```
-
-\pagebreak
-
-### 1.3 Latinx
-Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according Latinx population estimate in certain age group.
-
-```{r}
-
-Washtenaw_all %>%
-  filter(Race == "Latinx" & Estimate != "0") %>%
-  ggplot(aes(x=Estimate,
-             color = Gender, fill = Gender)) + 
-  geom_histogram(alpha = .7) +
-  facet_wrap(~Age) + 
-  labs(x = "Population Estimate", 
-       y = "Frequency") +
-    scale_fill_tableau() +
-  scale_color_tableau()
-
-```
-
-### 1.4 Pacific Islander
-There is no 65+ seniors in Washtenaw County identified themselves as Pacific Islander in the *2013-2017 American Community Survey 5-Year Estimates*.
-
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-
-
-### 1.5 Native
-Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according Native population estimate in certain age group.
-
-```{r}
-
-Washtenaw_all %>%
-  filter(Race == "Native" & Estimate != "0") %>%
-  ggplot(aes(x=Estimate,
-             color = Gender, fill = Gender)) + 
-  geom_histogram(alpha = .7) +
-  facet_wrap(~Age) + 
-  labs(x = "Population Estimate", 
-       y = "Frequency") +
-    scale_fill_tableau() +
-  scale_color_tableau()
-
-```
-
-\pagebreak
-
-### 1.6 White
-Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according White population estimate in certain age group.
-
-```{r}
-
-Washtenaw_all %>%
-  filter(Race == "White" & Estimate != "0") %>%
-  ggplot(aes(x=Estimate,
-             color = Gender, fill = Gender)) + 
-  geom_histogram(alpha = .7) +
-  facet_wrap(~Age) + 
-  labs(x = "Population Estimate", 
-       y = "Frequency") +
-    scale_fill_tableau() +
-  scale_color_tableau()
-
-```
-
-
-### 1.7 Other
-Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according other race/ethnicity population estimate in certain age group.
-
-```{r}
-
-Washtenaw_all %>%
-  filter(Race == "Other" & Estimate != "0") %>%
-  ggplot(aes(x=Estimate,
-             color = Gender, fill = Gender)) + 
-  geom_histogram(alpha = .7) +
-  facet_wrap(~Age) + 
-  labs(x = "Population Estimate", 
-       y = "Frequency") +
-    scale_fill_tableau() +
-  scale_color_tableau()
-
-```
-
-\pagebreak
-
-## 2. Comparison Graphs {.tabset}
-
-### 2.1 Summary Table
+### 1.1 Summary Table
 ```{r}
 
 img8 <- readPNG ("~/Box Sync/shihyac/Tableau/Summary.png")
@@ -211,7 +122,7 @@ img8 <- readPNG ("~/Box Sync/shihyac/Tableau/Summary.png")
 grid.raster(img8)
 ```
 
-### 2.2 By Race/Ethnicity
+### 1.2 By Race/Ethnicity
 
 For each race, every dot is a census tract.
 
@@ -226,7 +137,8 @@ p1 <- Washtenaw_all %>%
   labs(y = "Population Estimate")
 
 p2 <- p1 + theme(axis.text.x = element_text(size = rel(1)), legend.position = "none") + 
-  geom_boxplot(fill = "white") + labs(title = "Comparison by Race/Ethnicity", subtitle = "For each race every dot is a census tract") + xlab(" ") +
+  geom_boxplot(fill = "white") + labs(title = "", subtitle = "") + 
+  xlab(" ") +
   scale_fill_tableau() +
   scale_color_tableau() + 
   theme_minimal()
@@ -237,14 +149,16 @@ ggplotly(p2) %>%
 
 ```
 
-### 2.3 By Race/Ethnicity and Age
+### 1.3 By Race/Ethnicity and Age
 
 For each race, every dot is a census tract.
 
 ```{r}
 
 p3 <- p1 +  theme(axis.text.x = element_text(size = rel(.8)), legend.position = "none") + 
-  facet_wrap(~Age) + geom_beeswarm() + labs(title = "Comparison by Race/Ethnicity and Age", subtitle = "For each group every dot is a census tract") + xlab(" ") +
+  facet_wrap(~Age) + 
+  geom_beeswarm() + 
+  labs(title = "", subtitle = "") + xlab(" ") +
     scale_fill_tableau() +
   scale_color_tableau() + 
   theme_minimal()
@@ -256,7 +170,7 @@ ggplotly(p3, tooltip = "Estimate") %>%
 
 \pagebreak
 
-### 2.4 By Race
+### 1.4 By Race
 
 ```{r}
 pal <- c("blue", "orange", "red", "light blue", "dark green")
@@ -279,7 +193,7 @@ p_race2 <- Washtenaw_all %>%
 p_race2
 ```
 
-### 2.5 By Gender
+### 1.5 By Gender
 
 ```{r out.width = "70%"}
 img9 <- readPNG ("~/Box Sync/shihyac/Tableau/Gender.png")
@@ -287,6 +201,147 @@ img9 <- readPNG ("~/Box Sync/shihyac/Tableau/Gender.png")
 grid.raster(img9)
 
 ```
+
+## 2. Individual Race/Ethnicity Graphs {.tabset}
+
+### 2.1 Asian
+Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according Asian population estimate in certain age group.
+
+```{r}
+p_asian <- Washtenaw_all %>%
+  filter(Race == "Asian" & Estimate != "0") %>%
+  ggplot(aes(x=Estimate,
+             color = Gender, fill = Gender)) + 
+  geom_histogram(alpha = .7) +
+  facet_wrap(~Age) +
+  labs(x = "Population Estimate", 
+       y = "Frequency") +
+  scale_fill_tableau() +
+  scale_color_tableau()
+  
+
+ggplotly(p_asian, tooltip = c("Estimate", "count"))
+
+```
+
+
+
+### 2.2 Black
+Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according Black population estimate in certain age group.
+
+```{r}
+
+p_black <- Washtenaw_all %>%
+  filter(Race == "Black" & Estimate != "0") %>%
+  ggplot(aes(x=Estimate,
+             color = Gender, fill = Gender)) + 
+  geom_histogram(alpha = .7) +
+  facet_wrap(~Age) + 
+  labs(x = "Population Estimate", 
+       y = "Frequency") +
+  scale_fill_tableau() +
+  scale_color_tableau()
+
+ggplotly(p_black, tooltip = c("Estimate", "count"))
+
+```
+
+\pagebreak
+
+### 2.3 Latinx
+Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according Latinx population estimate in certain age group.
+
+```{r}
+
+p_latinx <- Washtenaw_all %>%
+  filter(Race == "Latinx" & Estimate != "0") %>%
+  ggplot(aes(x=Estimate,
+             color = Gender, fill = Gender)) + 
+  geom_histogram(alpha = .7) +
+  facet_wrap(~Age) + 
+  labs(x = "Population Estimate", 
+       y = "Frequency") +
+    scale_fill_tableau() +
+  scale_color_tableau()
+
+ggplotly(p_latinx, tooltip = c("Estimate", "count"))
+
+```
+
+### 2.4 Pacific Islander
+There is no 65+ seniors in Washtenaw County identified themselves as Pacific Islander in the *2013-2017 American Community Survey 5-Year Estimates*.
+
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+
+
+### 2.5 Native
+Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according Native population estimate in certain age group.
+
+```{r}
+
+p_native <- Washtenaw_all %>%
+  filter(Race == "Native" & Estimate != "0") %>%
+  ggplot(aes(x=Estimate,
+             color = Gender, fill = Gender)) + 
+  geom_histogram(alpha = .7) +
+  facet_wrap(~Age) + 
+  labs(x = "Population Estimate", 
+       y = "Frequency") +
+    scale_fill_tableau() +
+  scale_color_tableau()
+
+ggplotly(p_native, tooltip = c("Estimate", "count"))
+
+```
+
+\pagebreak
+
+### 2.6 White
+Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according White population estimate in certain age group.
+
+```{r}
+
+p_white <- Washtenaw_all %>%
+  filter(Race == "White" & Estimate != "0") %>%
+  ggplot(aes(x=Estimate,
+             color = Gender, fill = Gender)) + 
+  geom_histogram(alpha = .7) +
+  facet_wrap(~Age) + 
+  labs(x = "Population Estimate", 
+       y = "Frequency") +
+    scale_fill_tableau() +
+  scale_color_tableau()
+
+ggplotly(p_white, tooltip = c("Estimate", "count"))
+
+```
+
+
+### 2.7 Other
+Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according other race/ethnicity population estimate in certain age group.
+
+```{r}
+
+p_other <- Washtenaw_all %>%
+  filter(Race == "Other" & Estimate != "0") %>%
+  ggplot(aes(x=Estimate,
+             color = Gender, fill = Gender)) + 
+  geom_histogram(alpha = .7) +
+  facet_wrap(~Age) + 
+  labs(x = "Population Estimate", 
+       y = "Frequency") +
+    scale_fill_tableau() +
+  scale_color_tableau()
+
+ggplotly(p_other, tooltip = c("Estimate", "count"))
+
+```
+
+\pagebreak
+
 
 ## 3. Demographics Maps {.tabset}
 
