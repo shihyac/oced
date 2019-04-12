@@ -281,7 +281,7 @@ p_race2
 
 ### 2.5 By Gender
 
-```{r}
+```{r out.width = "70%"}
 img9 <- readPNG ("~/Box Sync/shihyac/Tableau/Gender.png")
 
 grid.raster(img9)
