@@ -3,6 +3,13 @@ title: '**Washtenaw County 65+ Demographic Report**'
 author: "Washtenaw County Office of Community & Economic Development"
 date: "`r format(Sys.Date(), format='%B %d, %Y')`"
 output:
+  bookdown::gitbook:
+    config:
+      download:
+      - OCED-SNP_Report.pdf
+    css: styles.css
+    highlight: haddock
+    number_sections: no
   pdf_document:
     fig_height: 3
     highlight: haddock
@@ -12,13 +19,6 @@ output:
   html_document:
     theme: cosmo
     toc: no
-  bookdown::gitbook:
-    config:
-      download:
-      - OCED-SNP_Report.pdf
-    css: styles.css
-    highlight: haddock
-    number_sections: no
 ---
 
 ```{r setup, include=FALSE}
@@ -27,13 +27,25 @@ knitr::opts_chunk$set(echo = FALSE,
                       Message = FALSE, 
                       fig.margin = TRUE)
 
-library(ggplot2)
+library(dplyr) # data management
 
-library(dplyr)
+library(tidyr) # tidying data
 
-library(ggthemes)
+library(ggplot2) # beautiful grap?hs
+
+library(ggthemes) # beautiful themes
+
+library(plotly) # beautiful INTERACTIVE graphs
+
+library(DT) # beautiful data tables
+
+library(RColorBrewer)
 
 library(ggbeeswarm)
+
+library(png)
+
+library(grid)
 
 
 ```
@@ -169,7 +181,6 @@ Washtenaw_all %>%
 ```
 
 
-
 ### 1.7 Other
 Each frequency indicates the amount of Census Tracts in Washtenaw County that have the according other race/ethnicity population estimate in certain age group.
 
@@ -192,7 +203,18 @@ Washtenaw_all %>%
 
 ## 2. Comparison Graphs {.tabset}
 
-### 2.1 By Race/Ethnicity
+### 2.1 Summary Table
+```{r}
+
+img8 <- readPNG ("~/Box Sync/shihyac/Tableau/Summary.png")
+
+grid.raster(img8)
+```
+
+### 2.2 By Race/Ethnicity
+
+For each race, every dot is a census tract.
+
 ```{r}
 
 p1 <- Washtenaw_all %>%
@@ -203,44 +225,124 @@ p1 <- Washtenaw_all %>%
            fill = Race)) +
   labs(y = "Population Estimate")
 
-p1 + theme(axis.text.x = element_text(size = rel(1))) + 
+p2 <- p1 + theme(axis.text.x = element_text(size = rel(1)), legend.position = "none") + 
   geom_boxplot(fill = "white") + labs(title = "Comparison by Race/Ethnicity", subtitle = "For each race every dot is a census tract") + xlab(" ") +
-    scale_fill_tableau() +
-  scale_color_tableau()
+  scale_fill_tableau() +
+  scale_color_tableau() + 
+  theme_minimal()
+
+ggplotly(p2) %>%
+  layout(xaxis = list(title = ""),
+         yaxis = list(title = "Population Estimate"), showlegend = FALSE) 
 
 ```
 
-### 2.2 By Race/Ethnicity and Age
+### 2.3 By Race/Ethnicity and Age
+
+For each race, every dot is a census tract.
 
 ```{r}
 
-p1 +  theme(axis.text.x = element_text(size = rel(.8))) + 
+p3 <- p1 +  theme(axis.text.x = element_text(size = rel(.8)), legend.position = "none") + 
   facet_wrap(~Age) + geom_beeswarm() + labs(title = "Comparison by Race/Ethnicity and Age", subtitle = "For each group every dot is a census tract") + xlab(" ") +
     scale_fill_tableau() +
-  scale_color_tableau()
+  scale_color_tableau() + 
+  theme_minimal()
+
+ggplotly(p3, tooltip = "Estimate") %>%  
+  layout(showlegend = FALSE)
 
 ```
 
 \pagebreak
 
-### 2.3 Total Population
+### 2.4 By Race
 
 ```{r}
-facet_horiz_dotchart <- Washtenaw_all %>%
-  filter(Race != "Other" & Estimate != "0") %>%
-  ggplot(aes(x = factor(Race),y = Estimate, color = Race)) + 
-          stat_summary(fun.y = sum, 
-          geom = "point", 
-          size = 7) +
-  guides(fill=FALSE) +
-  xlab(" ") + 
-  ylab("Total Population Estimate") + 
-  labs(title = "Comparison of Total Population by Race/Ethnicity") +
-  theme(axis.title.y = element_blank(),
-        axis.ticks = element_blank()) +
-    scale_fill_tableau() +
-  scale_color_tableau()
+pal <- c("blue", "orange", "red", "light blue", "dark green")
 
-facet_horiz_dotchart
+p_race2 <- Washtenaw_all %>% 
+  group_by(Race) %>%
+  filter(Race != "Other" & Race != "Pacific Islander" & !is.na(Estimate)) %>%
+  summarise(Total_Population = sum(Estimate)) %>%
+  plot_ly(type = 'scatter', mode = 'markers', 
+          color = ~Race, colors = pal) %>%
+  add_trace(x = ~Race, 
+            y = ~Total_Population,
+            marker = (list(
+              size = 20))) %>%
+  layout(title = "Comparison of Total Population by Race",
+         xaxis = list(title = ""),
+         yaxis = list(title = ""), showlegend = FALSE)
+
+
+p_race2
 ```
 
+### 2.5 By Gender
+
+```{r}
+img9 <- readPNG ("~/Box Sync/shihyac/Tableau/Gender.png")
+
+grid.raster(img9)
+
+```
+
+## 3. Demographics Maps {.tabset}
+
+### 3.1 Asian
+```{r}
+
+img1 <- readPNG ("~/Box Sync/shihyac/QGIS/Exports/Individual Maps_Asian.png")
+
+grid.raster(img1)
+```
+
+### 3.2 Black
+```{r}
+
+img2 <- readPNG ("~/Box Sync/shihyac/QGIS/Exports/Individual Maps_Black.png")
+
+grid.raster(img2)
+```
+
+### 3.3 Latinx
+```{r}
+
+img3 <- readPNG ("~/Box Sync/shihyac/QGIS/Exports/Individual Maps_Latinx.png")
+
+grid.raster(img3)
+```
+
+
+### 3.4 Native
+```{r}
+
+img4 <- readPNG ("~/Box Sync/shihyac/QGIS/Exports/Individual Maps_Native.png")
+
+grid.raster(img4)
+```
+
+### 3.5 White
+```{r}
+
+img5 <- readPNG ("~/Box Sync/shihyac/QGIS/Exports/Individual Maps_White.png")
+
+grid.raster(img5)
+```
+
+### 3.6 Other Race
+```{r}
+
+img6 <- readPNG ("~/Box Sync/shihyac/QGIS/Exports/Individual Maps_Other.png")
+
+grid.raster(img6)
+```
+
+### 3.7 All Races
+```{r}
+
+img7 <- readPNG ("~/Box Sync/shihyac/QGIS/Exports/Washtenaw County 65+ Population Demographics.png")
+
+grid.raster(img7)
+```
