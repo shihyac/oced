@@ -186,7 +186,7 @@ p_race2 <- Washtenaw_all %>%
             y = ~Total_Population,
             marker = (list(
               size = 20))) %>%
-  layout(title = "Comparison of Total Population by Race",
+  layout(title = "",
          xaxis = list(title = ""),
          yaxis = list(title = ""), showlegend = FALSE)
 
