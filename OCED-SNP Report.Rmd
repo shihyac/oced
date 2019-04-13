@@ -120,6 +120,7 @@ load ("~/Box Sync/shihyac/RData/WashtenawDemo.RData")
 img8 <- readPNG ("~/Box Sync/shihyac/Tableau/Summary.png")
 
 grid.raster(img8)
+
 ```
 
 ### 1.2 By Race/Ethnicity
